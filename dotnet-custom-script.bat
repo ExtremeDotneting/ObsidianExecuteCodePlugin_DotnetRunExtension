@@ -18,6 +18,14 @@ for /f %%a in (%scriptTempFilePath%) do (
 )
 :endLoop
 
+
+
+
+echo %*
+
+
+
+
 rem Choose which execute strategy to use.
 if "%firstWord%"=="//use-csproj" (
   goto csprojPart
@@ -29,6 +37,8 @@ rem Default case you can set here.
 goto csprojPart
 
 
+
+
 rem If decided to execute via DotnetProject.csproj.
 :csprojPart
 if not exist "%csprojPath%" (
@@ -36,11 +46,15 @@ if not exist "%csprojPath%" (
 )
 type "%scriptTempFilePath%" > "%csprojPath%\Program.cs"
 dotnet run --project "%csprojPath%
-goto exit
+goto checkIfError
 
 rem If decided to execute via dotnet-script tool.
 :dotnetScriptPart
 dotnet-script %scriptTempFilePath%
-goto exit
+goto checkIfError
 
-:exit
+
+
+
+:checkIfError
+echo %ERRORLEVEL%
